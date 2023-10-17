@@ -3,6 +3,12 @@
 ## Context
 Protein function prediction is a critical problem in bioinformatics. It involves determining the specific biological functions of a given protein based on its sequence (amino acids) and structure. This is known to be a challenging task due to the complex relationships between amino acids and their functional roles, as well as the vast number of possible protein functions. Accurate predictions hold immense potential for applications in drug discovery, understanding disease mechanisms, how organs and tissues work, and more.
 
+DeepMind has made a great introduction video on why proteins are useful in any biological process.
+
+<p align="center" href="http://www.youtube.com/watch?feature=player_embedded&v=KpedmJdrTpY">
+ <img src="http://img.youtube.com/vi/KpedmJdrTpY/mqdefault.jpg" alt="Watch the video" width="300" height="180" border="10" />
+</p>
+
 ## Methdology
 
 ### Proposed Architecture
