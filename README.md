@@ -19,13 +19,13 @@ The model architecture is summarised below.
 ### Making Fine-Tuning efficient
 To effectively train a model with approximately 1 billion parameters on a single T4 GPU in Google Colab, we employed the following key techniques.
 
-**1. Mixed Precision & Quantization**
+** 1. Mixed Precision & Quantization **
 Quantization is a technique that involves representing the model's weights and activations with lower precision numbers. This reduces the memory footprint and computational requirements, allowing for faster training and inference. Mixed precision training combines both lower and higher precision data types to strike a balance between precision and efficiency. 
 
-**2. Model Distillation**
+** 2. Model Distillation **
 Distillation is a knowledge transfer technique where a larger, more complex model (teacher) imparts its knowledge to a smaller, more efficient model (student). This is achieved by training the student model to mimic the output probabilities of the teacher model. Distilling a model from scratch is a long task on its own, so we decided to load pre-existing distilled models of ProtBERT and BioBERT available on HuggingFace.
 
-**3. Fine-Tuning using Low Rank Adaptation**
+** 3. Fine-Tuning using Low Rank Adaptation **
 LoRA (Low-Rank Adaptation of Large Language Models) is a widely used parameter-efficient fine-tuning technique. It consists in freezing the weights of the layer, and injects trainable rank-decomposition matrices. Assume we have an $n \times n$ pre-trained dense layer (or weight matrix), $W_0$. We initialize two dense layers, $A$ and $B$, of shapes $n \times r$, and $r \times n$, respectively, where the rank $r$ is much smaller than $n$. The equation is $y = W_0 x + b_0 + B A x$. Therefore, LoRA assumes that the original dense layer from the pre-trained model has intrinsic low rank because LLMs are over-parametrised, so it can be factorised in two low-rank matrices. Overall, this reduces by a large factor the number of parameters to be trained or fine-tuned, and it also reduces the required amount of memory.
 
 ## Results
