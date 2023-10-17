@@ -5,9 +5,7 @@ Protein function prediction is a critical problem in bioinformatics. It involves
 
 DeepMind has made a great introduction video on why proteins are useful in any biological process.
 
-<p align="center" href="http://www.youtube.com/watch?feature=player_embedded&v=KpedmJdrTpY">
- <img src="http://img.youtube.com/vi/KpedmJdrTpY/mqdefault.jpg" alt="Watch the video" width="300" height="180" border="10" />
-</p>
+[![](http://img.youtube.com/vi/KpedmJdrTpY/mqdefault.jpg)](http://www.youtube.com/watch?feature=player_embedded&v=KpedmJdrTpY)
 
 ## Methdology
 
