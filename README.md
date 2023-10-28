@@ -33,6 +33,36 @@ Distillation is a knowledge transfer technique where a larger, more complex mode
 LoRA (Low-Rank Adaptation of Large Language Models) is a widely used parameter-efficient fine-tuning technique. It consists in freezing the weights of the layer, and injects trainable rank-decomposition matrices. Assume we have an $n \times n$ pre-trained dense layer (or weight matrix), $W_0$. We initialize two dense layers, $A$ and $B$, of shapes $n \times r$, and $r \times n$, respectively, where the rank $r$ is much smaller than $n$. The equation is $y = W_0 x + b_0 + B A x$. Therefore, LoRA assumes that the original dense layer from the pre-trained model has intrinsic low rank because LLMs are over-parametrised, so it can be factorised in two low-rank matrices. Overall, this reduces by a large factor the number of parameters to be trained or fine-tuned, and it also reduces the required amount of memory.
 
 ## Results
+
+$$
+\begin{aligned}
+& \begin{array}{cccccccc}
+& n_{\text{prot.}} & n_{\text{func.}} & \text{Seen prot.} & \text{Seen func.} & \text{AUC} & \text{Precision} & \text{Recall} & F_1\text{-Score} \\
+\hline
+\text{Imbalanced} & 500 & 20 & \checkmark & \checkmark & 0.75 & 0.16 & 0.47 & 0.24 \\
+ &  &  & \checkmark &  & 0.52 & 0.08 & 0.04 & 0.06 \\
+ &  &  &  & \checkmark & 0.72 & 0.17 & 0.47 & 0.24 \\
+ &  &  &  &  & 0.49 & 0.07 & 0.03 & 0.04 \\
+\hline
+\text{Imbalanced} & 20 & 500 & \checkmark & \checkmark & 0.88 & 0.32 & 0.79 & 0.45 \\
+ &  &  & \checkmark &  & 0.77 & 0.25 & 0.58 & 0.35 \\
+ &  &  &  & \checkmark & 0.74 & 0.24 & 0.58 & 0.34 \\
+ &  &  &  &  & 0.69 & 0.22 & 0.46 & 0.29 \\
+\hline
+\text{Balanced} & 100 & 100 & \checkmark & \checkmark & 0.83 & 0.26 & 0.71 & 0.38 \\
+ &  &  & \checkmark &  & 0.62 & 0.13 & 0.41 & 0.19 \\
+ &  &  &  & \checkmark & 0.79 & 0.26 & 0.65 & 0.37 \\
+ &  &  &  &  & 0.61 & 0.12 & 0.40 & 0.19 \\
+\hline
+\text{Balanced} & 200 & 200 & \checkmark & \checkmark & . & . & . & . \\
+ &  &  & \checkmark &  & . & . & . & . \\
+ &  &  &  & \checkmark & . & . & . & . \\
+ &  &  &  &  & . & . & . & . \\
+\hline
+\end{array}
+\end{aligned}
+$$
+
 Our approach represents a novel end-to-end architecture inspired by recommender systems (two-towers). Our model demonstrates the ability to learn and generalize to both previously unseen protein sequences and novel functions, showcasing its significant adaptability, while simply fine-tuned on a single T4 GPU on Google Colab. Protein function prediction is crucial for understanding the biological roles of proteins, which are fundamental building blocks of life. It enables researchers to uncover the specific tasks and interactions that proteins perform within cells, shedding light on disease mechanisms and aiding in the development of targeted therapies. Additionally, accurate predictions have significant implications for drug discovery, as they guide the identification of potential drug targets and the design of effective pharmaceutical interventions.
 
 In terms of further research, it would obviously be interesting to observe the behaviour of the proposed approach at a larger scale, such as a better GPU (A100), more training examples, or training for more epochs. Also, we did not discuss this part of the approach explicitely here but we used a very naive sampling strategy by sampling $n$ random proteins and $p$ random functions, and optimising the model on these $n \times p$ pairs. However, we could explore the effects of training the model with a few different protein sequences but with much more protein functions, or vice versa (few-shot learning). Lastly, we did not leverage the graph structure of protein functions. Indeed, some protein functions are related to each other in the sense that they would be close, and therefore if a protein has a specific function, it may be likely that it has other similar functions. We could therefore have included in our approach the graph structure of protein functions and instead of only using the function description, we would have used its node representation in the global graph. The proposed model architecture is shown below.
