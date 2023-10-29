@@ -54,10 +54,10 @@ $$
  &  &  &  & \checkmark & 0.79 & 0.26 & 0.65 & 0.37 \\
  &  &  &  &  & 0.61 & 0.12 & 0.40 & 0.19 \\
 \hline
-\text{Balanced} & 200 & 200 & \checkmark & \checkmark & . & . & . & . \\
- &  &  & \checkmark &  & . & . & . & . \\
- &  &  &  & \checkmark & . & . & . & . \\
- &  &  &  &  & . & . & . & . \\
+\text{Balanced} & 200 & 200 & \checkmark & \checkmark & 0.84 & 0.26 & 0.71 & 0.38 \\
+ &  &  & \checkmark &  & 0.72 & 0.25 & 0.68 & 0.37 \\
+ &  &  &  & \checkmark & 0.82 & 0.27 & 0.69 & 0.39 \\
+ &  &  &  &  & 0.70 & 0.26 & 0.65 & 0.37 \\
 \hline
 \end{array}
 \end{aligned}
