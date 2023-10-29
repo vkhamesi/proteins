@@ -77,15 +77,15 @@ The model reaching best performance on test data is the proposed architecture tr
 All models are available to be downloaded from the following links:
 - model trained on 500 proteins and 20 functions `model_500_20.pt` [here]()
 - model trained on 20 proteins and 500 functions `model_20_500.pt` [here]()
-- model trained on 100 proteins and 100 functions `model_100_100.pt` [here]()
-- model trained on 200 proteins and 200 functions `model_200_200.pt` [here]()
+- model trained on 100 proteins and 100 functions `model_100_100.pt` [here](https://drive.google.com/file/d/1xh9Gdbv0vG-xAhGEQRgC448K17TvjVmc/view?usp=sharing)
+- model trained on 200 proteins and 200 functions `model_200_200.pt` [here](https://drive.google.com/file/d/1NJfjk1ZOUcfpG2tMB3Vomjl2wt69R42Y/view?usp=sharing)
 
-You can load the models directly as PyTorch models as
+You can load the models directly as PyTorch models using
 ```python
 import torch
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model = torch.load("path/to/model_n_p.pt", map_location=device)
+model = torch.load("path/to/model_200_200.pt", map_location=device)
 model.eval()
 ```
 
