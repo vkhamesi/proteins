@@ -32,6 +32,15 @@ Distillation is a knowledge transfer technique where a larger, more complex mode
 **3. Fine-Tuning using Low Rank Adaptation.**
 LoRA (Low-Rank Adaptation of Large Language Models) is a widely used parameter-efficient fine-tuning technique. It consists in freezing the weights of the layer, and injects trainable rank-decomposition matrices. Assume we have an $n \times n$ pre-trained dense layer (or weight matrix), $W_0$. We initialize two dense layers, $A$ and $B$, of shapes $n \times r$, and $r \times n$, respectively, where the rank $r$ is much smaller than $n$. The equation is $y = W_0 x + b_0 + B A x$. Therefore, LoRA assumes that the original dense layer from the pre-trained model has intrinsic low rank because LLMs are over-parametrised, so it can be factorised in two low-rank matrices. Overall, this reduces by a large factor the number of parameters to be trained or fine-tuned, and it also reduces the required amount of memory.
 
+## Technical details
+
+- We use an open-source distilled version of [ProtBERT](https://huggingface.co/Rostlab/prot_bert) model available on HuggingFace as [DistilProtBERT](https://huggingface.co/yarongef/DistilProtBert). We use an open-source distilled version of [BioBERT](https://huggingface.co/dmis-lab/biobert-v1.1) model available on HuggingFace as [DistilBioBERT](https://huggingface.co/nlpie/distil-biobert). 
+- The original dataset contains $n \approx 140,000$ protein sequences and $p \approx 40,000$ function descriptions. However, we trained our models on only a few thousand pairs using different sampling strategies.
+- The maximum sequence length for the protein model is set to $1024$ and the maximum sequence length for the large language model is set to $256$.
+- We trained models on a single T4 GPU using Google Colab using a batch size of 32 and mixed precision (`float16`).
+- We fine-tune both pre-trained models using PEFT and LoRA: 3 layers (out of 6) of BioBERT model are fine-tuned, and 2 (out of 15) layers of ProtBERT are fine-tuned. The reshaping layers and the final multi-layer perceptron are trained from scratch using ReLU activations and dropout as a regularisation technique. In total, approximately 0.50% of the model parameters are trainable. 
+- The optimiser is AdamW with a learning rate of $10^{-3}$. The loss function is a weighted binary cross-entropy from logits to manage class imbalance (in average, a protein has less than 10% of all functions). Each model is trained on 3 epochs.
+
 ## Results
 
 $$
@@ -62,6 +71,10 @@ $$
 \end{array}
 \end{aligned}
 $$
+
+The model reaching best performance on test data is the proposed architecture trained on 200 protein sequences and 200 function descriptions, that is 4 times more training pairs than any other trained model. Training this model takes approximately 3 hours on a single T4 GPU, whereas other models took around 40 minutes to be trained. Note however that this model is closely followed by the imbalanced model trained on 20 protein sequences and 500 function descriptions, suggesting that the original distilled ProtBERT model seems powerful enough to extract useful information from protein sequences, while the original distilled BioBERT model requires more fine-tuning. This could also be explained by the fact that function embeddings are only extracted from their text description and which could be lacking of accurate information. 
+
+## Conclusion
 
 Our approach represents a novel end-to-end architecture inspired by recommender systems (two-towers) which demonstrates the ability to learn and generalize to both previously unseen protein sequences and novel functions, showcasing its significant adaptability, while simply fine-tuned on a single T4 GPU on Google Colab. Protein function prediction is crucial for understanding the biological roles of proteins, which are fundamental building blocks of life. It enables researchers to uncover the specific tasks and interactions that proteins perform within cells, shedding light on disease mechanisms and aiding in the development of targeted therapies. Additionally, accurate predictions have significant implications for drug discovery, as they guide the identification of potential drug targets and the design of effective pharmaceutical interventions.
 
