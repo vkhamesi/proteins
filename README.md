@@ -74,6 +74,21 @@ $$
 
 The model reaching best performance on test data is the proposed architecture trained on 200 protein sequences and 200 function descriptions, that is 4 times more training pairs than any other trained model. Training this model takes approximately 3 hours on a single T4 GPU, whereas other models took around 40 minutes to be trained. Note however that this model is closely followed by the imbalanced model trained on 20 protein sequences and 500 function descriptions, suggesting that the original distilled ProtBERT model seems powerful enough to extract useful information from protein sequences, while the original distilled BioBERT model requires more fine-tuning. This could also be explained by the fact that function embeddings are only extracted from their text description and which could be lacking of accurate information. 
 
+All models are available to be downloaded from the following links:
+- model trained on 500 proteins and 20 functions `model_500_20.pt` [here]()
+- model trained on 20 proteins and 500 functions `model_20_500.pt` [here]()
+- model trained on 100 proteins and 100 functions `model_100_100.pt` [here]()
+- model trained on 200 proteins and 200 functions `model_200_200.pt` [here]()
+
+You can load the models directly as PyTorch models as
+```python
+import torch
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model = torch.load("path/to/model_n_p.pt", map_location=device)
+model.eval()
+```
+
 ## Conclusion
 
 Our approach represents a novel end-to-end architecture inspired by recommender systems (two-towers) which demonstrates the ability to learn and generalize to both previously unseen protein sequences and novel functions, showcasing its significant adaptability, while simply fine-tuned on a single T4 GPU on Google Colab. Protein function prediction is crucial for understanding the biological roles of proteins, which are fundamental building blocks of life. It enables researchers to uncover the specific tasks and interactions that proteins perform within cells, shedding light on disease mechanisms and aiding in the development of targeted therapies. Additionally, accurate predictions have significant implications for drug discovery, as they guide the identification of potential drug targets and the design of effective pharmaceutical interventions.
