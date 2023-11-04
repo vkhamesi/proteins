@@ -35,35 +35,35 @@ LoRA (Low-Rank Adaptation of Large Language Models) is a widely used parameter-e
 ## Technical details
 
 - We use an open-source distilled version of [ProtBERT](https://huggingface.co/Rostlab/prot_bert) model available on HuggingFace as [DistilProtBERT](https://huggingface.co/yarongef/DistilProtBert). We use an open-source distilled version of [BioBERT](https://huggingface.co/dmis-lab/biobert-v1.1) model available on HuggingFace as [DistilBioBERT](https://huggingface.co/nlpie/distil-biobert). 
-- The original dataset contains $n \approx 140,000$ protein sequences and $p \approx 40,000$ function descriptions. However, we trained our models on only a few thousand pairs using different sampling strategies.
-- The maximum sequence length for the protein model is set to $1024$ and the maximum sequence length for the large language model is set to $256$.
-- We trained models on a single T4 GPU using Google Colab using a batch size of 32 and mixed precision (`float16`).
-- We fine-tune both pre-trained models using PEFT and LoRA: 3 layers (out of 6) of BioBERT model are fine-tuned, and 2 (out of 15) layers of ProtBERT are fine-tuned. The reshaping layers and the final multi-layer perceptron are trained from scratch using ReLU activations and dropout as a regularisation technique. In total, approximately 0.50% of the model parameters are trainable. 
-- The optimiser is AdamW with a learning rate of $10^{-3}$. The loss function is a weighted binary cross-entropy from logits to manage class imbalance (in average, a protein has less than 10% of all functions). Each model is trained on 3 epochs.
+- The original dataset contains approximately 140,000 protein sequences and 40,000 function descriptions. However, we trained our models on only a few thousand pairs using different sampling strategies.
+- The maximum sequence length for the protein model is set to 1024 and the maximum sequence length for the large language model is set to 256.
+- We trained models on a single T4 GPU using Google Colab using a batch size of 32 and 16-bit mixed precision.
+- We fine-tune both pre-trained models using PEFT and LoRA: 3 layers (out of 6) of BioBERT model are fine-tuned, and 2 (out of 15) layers of ProtBERT are fine-tuned. The reshaping layers and the final multi-layer perceptron are trained from scratch using ReLU activations and dropout as a regularisation technique. In total, only 0.5% of the model parameters are trainable. 
+- The used loss function is a weighted binary cross-entropy from logits to manage class imbalance (in average, a protein has less than 10% of all functions). Each model is trained on 3 epochs using AdamW optimiser.
 
 ## Results
 
 $$
 \begin{aligned}
 & \begin{array}{cccccccc}
-& n_{\text{prot.}} & n_{\text{func.}} & \text{Seen prot.} & \text{Seen func.} & \text{AUC} & \text{Precision} & \text{Recall} & F_1\text{-Score} \\
+& \boldsymbol{n_{\text{prot.}}} & \boldsymbol{n_{\text{func.}}} & \textbf{Seen prot.} & \textbf{Seen func.} & \textbf{AUC} & \textbf{Precision} & \textbf{Recall} & \boldsymbol{F_1}\textbf{-Score} \\
 \hline
-\text{Imbalanced} & 500 & 20 & ✔ & ✔ & 0.75 & 0.16 & 0.47 & 0.24 \\
+\textbf{Imbalanced} & 500 & 20 & ✔ & ✔ & 0.75 & 0.16 & 0.47 & 0.24 \\
  &  &  & ✔ & ✗ & 0.52 & 0.08 & 0.04 & 0.06 \\
  &  &  & ✗ & ✔ & 0.72 & 0.17 & 0.47 & 0.24 \\
  &  &  & ✗ & ✗ & 0.49 & 0.07 & 0.03 & 0.04 \\
 \hline
-\text{Imbalanced} & 20 & 500 & ✔ & ✔ & 0.88 & 0.32 & 0.79 & 0.45 \\
+\textbf{Imbalanced} & 20 & 500 & ✔ & ✔ & 0.88 & 0.32 & 0.79 & 0.45 \\
  &  &  & ✔ & ✗ & 0.77 & 0.25 & 0.58 & 0.35 \\
  &  &  & ✗ & ✔ & 0.74 & 0.24 & 0.58 & 0.34 \\
  &  &  & ✗ & ✗ & 0.69 & 0.22 & 0.46 & 0.29 \\
 \hline
-\text{Balanced} & 100 & 100 & ✔ & ✔ & 0.83 & 0.26 & 0.71 & 0.38 \\
+\textbf{Balanced} & 100 & 100 & ✔ & ✔ & 0.83 & 0.26 & 0.71 & 0.38 \\
  &  &  & ✔ & ✗ & 0.62 & 0.13 & 0.41 & 0.19 \\
  &  &  & ✗ & ✔ & 0.79 & 0.26 & 0.65 & 0.37 \\
  &  &  & ✗ & ✗ & 0.61 & 0.12 & 0.40 & 0.19 \\
 \hline
-\text{Balanced} & 200 & 200 & ✔ & ✔ & 0.84 & 0.26 & 0.71 & 0.38 \\
+\textbf{Balanced} & 200 & 200 & ✔ & ✔ & 0.84 & 0.26 & 0.71 & 0.38 \\
  &  &  & ✔ & ✗ & 0.72 & 0.25 & 0.68 & 0.37 \\
  &  &  & ✗ & ✔ & 0.82 & 0.27 & 0.69 & 0.39 \\
  &  &  & ✗ & ✗ & 0.70 & 0.26 & 0.65 & 0.37 \\
