@@ -17,7 +17,7 @@ The proposed model is similar to a Sentence-BERT architecture: the model compute
 The model architecture is summarised below.
 
 <p align="center">
-    <img src="https://github.com/vkhamesi/proteins/blob/main/img/architecture1.svg" alt>
+    <img src="https://github.com/vkhamesi/proteins/blob/master/img/architecture1.svg" alt>
 </p>
 
 ### Making Fine-Tuning efficient
@@ -96,7 +96,7 @@ Our approach represents a novel end-to-end architecture inspired by recommender 
 In terms of further research, it would obviously be interesting to observe the behaviour of the proposed approach at a larger scale, such as a better GPU (e.g. A100), more training examples, or training for more epochs. More importantly, we did not leverage the graph structure of protein functions. Indeed, some protein functions are related to each other in the sense that they would be close, and therefore if a protein has a specific function, it may be likely that it has other similar functions. We could therefore have included in our approach the graph structure of protein functions and instead of only using the function description, we would have used its node representation in the global graph. The proposed model architecture is shown below.
 
 <p align="center">
-    <img src="https://github.com/vkhamesi/proteins/blob/main/img/architecture2.svg" alt>
+    <img src="https://github.com/vkhamesi/proteins/blob/master/img/architecture2.svg" alt>
 </p>
 
 However, note that the explored approach is more flexible than this proposal in the sense that using the graph structure of protein functions would not allow possibly new functions that are not represented in the graph. Indeed, the current architecture only requires the protein amino acids sequence and a text description of the function to be evaluated, so it could be extended to any future and possibly unknown (yet) proteins and functions. Therefore, specifying a protein sequence and a function description is similar to prompting the model. 
