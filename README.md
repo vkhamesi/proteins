@@ -1,5 +1,7 @@
 # Protein Function Prediction using Deep Learning
 
+If you are interested in using the models and not into the scientific methodology, refer to the how-to-use section [below](#how-to-use). 
+
 ## Context
 Protein function prediction is a critical problem in bioinformatics. It involves determining the specific biological functions of a given protein based on its sequence (amino acids) and structure. This is known to be a challenging task due to the complex relationships between amino acids and their functional roles, as well as the vast number of possible protein functions. Accurate predictions hold immense potential for applications in drug discovery, understanding disease mechanisms, how organs and tissues work, and more.
 
@@ -74,6 +76,38 @@ $$
 
 The model reaching best performance on test data is the proposed architecture trained on 200 protein sequences and 200 function descriptions, that is 4 times more training pairs than any other trained model. Training this model takes approximately 3 hours on a single T4 GPU, whereas other models took around 40 minutes to be trained. Note however that this model is closely followed by the imbalanced model trained on 20 protein sequences and 500 function descriptions, suggesting that the original distilled ProtBERT model seems powerful enough to extract useful information from protein sequences, while the original distilled BioBERT model requires more fine-tuning. This could also be explained by the fact that function embeddings are only extracted from their text description and which could be lacking of accurate information. 
 
+## Conclusion
+
+Our approach represents a novel end-to-end architecture inspired by recommender systems (two-towers) which demonstrates the ability to learn and generalize to both previously unseen protein sequences and novel functions, showcasing its significant adaptability, while simply fine-tuned on a single T4 GPU on Google Colab. Protein function prediction is crucial for understanding the biological roles of proteins, which are fundamental building blocks of life. It enables researchers to uncover the specific tasks and interactions that proteins perform within cells, shedding light on disease mechanisms and aiding in the development of targeted therapies. Additionally, accurate predictions have significant implications for drug discovery, as they guide the identification of potential drug targets and the design of effective pharmaceutical interventions.
+
+In terms of further research, it would obviously be interesting to observe the behaviour of the proposed approach at a larger scale, such as a better GPU (e.g. A100), more training examples, or training for more epochs. More importantly, we did not leverage the graph structure of protein functions. Indeed, some protein functions are related to each other in the sense that they would be close, and therefore if a protein has a specific function, it may be likely that it has other similar functions. We could therefore have included in our approach the graph structure of protein functions and instead of only using the function description, we would have used its node representation in the global graph. The proposed model architecture is shown below.
+
+<p align="center">
+    <img src="https://github.com/vkhamesi/proteins/blob/master/img/architecture2.svg" alt>
+</p>
+
+However, note that the explored approach is more flexible than this proposal in the sense that using the graph structure of protein functions would not allow possibly new functions that are not represented in the graph. Indeed, the current architecture only requires the protein amino acids sequence and a text description of the function to be evaluated, so it could be extended to any future and possibly unknown (yet) proteins and functions. Therefore, specifying a protein sequence and a function description is similar to prompting the model. 
+
+## How-to-use
+
+### Train a new model
+
+Train a new model from scratch on your machine or a remote GPU using the `train.py` script and the following command line:
+```bash
+python3 train.py --n_prot 100 \
+               	 --n_func 100 \
+                 --batch_size 32 \
+                 --lora_rank 8 \
+                 --lora_dropout 0.1 \
+                 --device gpu \
+                 --lr 0.001 \
+                 --epochs 3 \
+                 --name model_name
+```
+The script will train and save the model as a PyTorch model as `/models/model_name.pt`. This is convenient when training models with different configurations. 
+
+### Load fine-tuned models
+
 All models are available to be downloaded from the following links:
 - model trained on 500 proteins and 20 functions `model_500_20.pt` [here]()
 - model trained on 20 proteins and 500 functions `model_20_500.pt` [here]()
@@ -88,15 +122,3 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model = torch.load("path/to/model_200_200.pt", map_location=device)
 model.eval()
 ```
-
-## Conclusion
-
-Our approach represents a novel end-to-end architecture inspired by recommender systems (two-towers) which demonstrates the ability to learn and generalize to both previously unseen protein sequences and novel functions, showcasing its significant adaptability, while simply fine-tuned on a single T4 GPU on Google Colab. Protein function prediction is crucial for understanding the biological roles of proteins, which are fundamental building blocks of life. It enables researchers to uncover the specific tasks and interactions that proteins perform within cells, shedding light on disease mechanisms and aiding in the development of targeted therapies. Additionally, accurate predictions have significant implications for drug discovery, as they guide the identification of potential drug targets and the design of effective pharmaceutical interventions.
-
-In terms of further research, it would obviously be interesting to observe the behaviour of the proposed approach at a larger scale, such as a better GPU (e.g. A100), more training examples, or training for more epochs. More importantly, we did not leverage the graph structure of protein functions. Indeed, some protein functions are related to each other in the sense that they would be close, and therefore if a protein has a specific function, it may be likely that it has other similar functions. We could therefore have included in our approach the graph structure of protein functions and instead of only using the function description, we would have used its node representation in the global graph. The proposed model architecture is shown below.
-
-<p align="center">
-    <img src="https://github.com/vkhamesi/proteins/blob/master/img/architecture2.svg" alt>
-</p>
-
-However, note that the explored approach is more flexible than this proposal in the sense that using the graph structure of protein functions would not allow possibly new functions that are not represented in the graph. Indeed, the current architecture only requires the protein amino acids sequence and a text description of the function to be evaluated, so it could be extended to any future and possibly unknown (yet) proteins and functions. Therefore, specifying a protein sequence and a function description is similar to prompting the model. 
