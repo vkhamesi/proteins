@@ -34,7 +34,7 @@ Distillation is a knowledge transfer technique where a larger, more complex mode
 **3. Fine-Tuning using Low Rank Adaptation.**
 LoRA (Low-Rank Adaptation of Large Language Models) is a widely used parameter-efficient fine-tuning technique. It consists in freezing the weights of the layer, and injects trainable rank-decomposition matrices. Assume we have an $n \times n$ pre-trained dense layer (or weight matrix), $W_0$. We initialize two dense layers, $A$ and $B$, of shapes $n \times r$, and $r \times n$, respectively, where the rank $r$ is much smaller than $n$. The equation is $y = W_0 x + b_0 + B A x$. Therefore, LoRA assumes that the original dense layer from the pre-trained model has intrinsic low rank because LLMs are over-parametrised, so it can be factorised in two low-rank matrices. Overall, this reduces by a large factor the number of parameters to be trained or fine-tuned, and it also reduces the required amount of memory.
 
-## Technical details
+### Technical details
 
 - We use an open-source distilled version of [ProtBERT](https://huggingface.co/Rostlab/prot_bert) model available on HuggingFace as [DistilProtBERT](https://huggingface.co/yarongef/DistilProtBert). We use an open-source distilled version of [BioBERT](https://huggingface.co/dmis-lab/biobert-v1.1) model available on HuggingFace as [DistilBioBERT](https://huggingface.co/nlpie/distil-biobert). 
 - The original dataset contains approximately 140,000 protein sequences and 40,000 function descriptions. However, we trained our models on only a few thousand pairs using different sampling strategies.
