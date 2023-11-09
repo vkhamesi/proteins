@@ -9,7 +9,7 @@ DeepMind has made a great introduction video on why proteins are useful in any b
 
 [![](http://img.youtube.com/vi/KpedmJdrTpY/mqdefault.jpg)](http://www.youtube.com/watch?feature=player_embedded&v=KpedmJdrTpY)
 
-## Methdology
+## Methodology
 
 ### Proposed Architecture
 The proposed model takes two inputs, a protein amino acids sequence and a protein function description, and is optimised to learn patterns and interactions between the two inputs to estimate the probability of the given protein to have the given function capability. Many so-called Large Protein Models have been proposed in the literature to extract features from proteins amino acids sequences, often trained on an unmasking tokens (amino acids) task. Similarly, many domain experts Large Language Models have been explored in the literature, including biology, in order to understand and extract feature from a technical biology text input, also pre-trained on an unmasking task and sometimes fine-tuned on a next sentence prediction task. In this work, we chose to use ProtBERT (published by RostLab) as a Large Protein Model and BioBERT (published by DMIS Lab) as a Large Language Model. 
